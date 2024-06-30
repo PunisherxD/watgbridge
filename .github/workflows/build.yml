@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        architecture: [armv7, arm64, x86_64]
+        architecture: [armv7, arm64]
 
     steps:
     - uses: actions/checkout@v3
@@ -108,17 +108,12 @@ jobs:
     - name: Build for armv7
       if: matrix.architecture == 'armv7'
       run: |
-        CGO_ENABLED=1 CC=armv7a-linux-androideabi21-clang GOARCH=arm GOOS=android go build -o watgbridge_android_armv7 .
+        CGO_ENABLED=1 CC=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi21-clang GOARCH=arm GOOS=android go build -o watgbridge_android_armv7 .
 
     - name: Build for arm64
       if: matrix.architecture == 'arm64'
       run: |
-        CGO_ENABLED=1 CC=aarch64-linux-android21-clang GOARCH=arm64 GOOS=android go build -o watgbridge_android_arm64 .
-
-    - name: Build for x86_64
-      if: matrix.architecture == 'x86_64'
-      run: |
-        CGO_ENABLED=1 CC=x86_64-linux-android21-clang GOARCH=amd64 GOOS=android go build -o watgbridge_android_x86_64 .
+        CGO_ENABLED=1 CC=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang GOARCH=arm64 GOOS=android go build -o watgbridge_android_arm64 .
 
     - name: Get Project Version
       id: get_version
@@ -132,7 +127,6 @@ jobs:
         files: |
           ./watgbridge_android_armv7
           ./watgbridge_android_arm64
-          ./watgbridge_android_x86_64
         tag_name: v${{ steps.get_version.outputs.version }}
         name: Release ${{ steps.get_version.outputs.version }}
       env:
