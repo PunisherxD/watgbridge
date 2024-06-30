@@ -108,17 +108,17 @@ jobs:
     - name: Build for armv7
       if: matrix.architecture == 'armv7'
       run: |
-        CC=armv7a-linux-androideabi21-clang GOARCH=arm GOOS=android go build -o watgbridge_android_armv7 .
+        CGO_ENABLED=1 CC=armv7a-linux-androideabi21-clang GOARCH=arm GOOS=android go build -o watgbridge_android_armv7 .
 
     - name: Build for arm64
       if: matrix.architecture == 'arm64'
       run: |
-        CC=aarch64-linux-android21-clang GOARCH=arm64 GOOS=android go build -o watgbridge_android_arm64 .
+        CGO_ENABLED=1 CC=aarch64-linux-android21-clang GOARCH=arm64 GOOS=android go build -o watgbridge_android_arm64 .
 
     - name: Build for x86_64
       if: matrix.architecture == 'x86_64'
       run: |
-        CC=x86_64-linux-android21-clang GOARCH=amd64 GOOS=android go build -o watgbridge_android_x86_64 .
+        CGO_ENABLED=1 CC=x86_64-linux-android21-clang GOARCH=amd64 GOOS=android go build -o watgbridge_android_x86_64 .
 
     - name: Get Project Version
       id: get_version
